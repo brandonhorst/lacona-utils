@@ -1,0 +1,43 @@
+{
+  "name": "lacona-utils",
+  "version": "0.0.1",
+  "description": "Utility functions for manipulating Lacona results",
+  "main": "lib/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "build": "babel src --out-dir lib",
+    "clean": "rimraf lib tmp",
+    "prepublish": "npm run build",
+    "pretest": "babel test --out-dir tmp",
+    "test": "mocha tmp",
+    "validate": "npm run build && npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lacona/lacona-utils.git"
+  },
+  "keywords": [
+    "lacona",
+    "util",
+    "join",
+    "group",
+    "words"
+  ],
+  "author": "@brandonhorst",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lacona/lacona-utils/issues"
+  },
+  "homepage": "https://github.com/lacona/lacona-utils#readme",
+  "devDependencies": {
+    "babel": "^5.8.29",
+    "chai": "^3.4.1",
+    "mocha": "^2.3.3",
+    "rimraf": "^2.4.3"
+  },
+  "dependencies": {
+    "lodash": "^3.10.1"
+  }
+}

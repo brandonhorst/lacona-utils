@@ -16,7 +16,19 @@ describe('combinePlaceholders', () => {
       annotations: [],
       score: 1
     }]
-    expect(combinePlaceholders(initial)).to.eql(initial)
+    expect(combinePlaceholders(initial)).to.eql([{
+      words: [{text: 'he', input: true}],
+      qualifiers: [],
+      arguments: [{start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }, {
+      words: [{text: 'she', input: true}],
+      qualifiers: [],
+      arguments: [{start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }])
   })
 
   it('combines placeholders', () => {
@@ -36,7 +48,104 @@ describe('combinePlaceholders', () => {
     expect(combinePlaceholders(initial)).to.eql([{
       words: [{placeholderTexts: ['he', 'she'], placeholder: true}],
       qualifiers: [],
-      arguments: [],
+      arguments: [{start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }])
+  })
+
+  it('combines placeholders that have an argument', () => {
+    const initial = [{
+      words: [{text: 'he', placeholder: true}],
+      qualifiers: [],
+      arguments: [{value: 'pronoun', start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }, {
+      words: [{text: 'she', placeholder: true}],
+      qualifiers: [],
+      arguments: [{value: 'pronoun', start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }]
+    expect(combinePlaceholders(initial)).to.eql([{
+      words: [{placeholderTexts: ['he', 'she'], placeholder: true}],
+      qualifiers: [],
+      arguments: [{start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }])
+  })
+
+  it('keeps sentences with multiple placeholders', () => {
+    const initial = [{
+      words: [
+        {text: 'he', placeholder: true},
+        {text: ' is ', input: false},
+        {text: 'she', placeholder: true}
+      ],
+      qualifiers: [],
+      arguments: [{value: 'pronoun', start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }]
+    expect(combinePlaceholders(initial)).to.eql([{
+      words: [
+        {placeholderTexts: ['he'], placeholder: true},
+        {text: ' is ', input: false},
+        {placeholderTexts: ['she'], placeholder: true}
+      ],
+      qualifiers: [],
+      arguments: [{start: 0, end: 3}],
+      annotations: [],
+      score: 1
+    }])
+  })
+
+  it('test', () => {
+    const initial = [{
+      words: [
+        {text: 'is ', input: true},
+        {text: 'pronoun', placeholder: true}
+      ],
+      qualifiers: [],
+      arguments: [{value: 'pronoun', start: 1, end: 2}],
+      annotations: [],
+      score: 1
+    }, {
+      words: [
+        {text: 'is ', input: true},
+        {text: 'pronoun', placeholder: true},
+        {text: ' ', input: false},
+        {text: 'pronoun', placeholder: true}
+      ],
+      qualifiers: [],
+      arguments: [
+        {value: 'pronoun', start: 1, end: 2},
+        {value: 'pronoun', start: 3, end: 4}
+      ],
+      annotations: [],
+      score: 1
+    }]
+
+    expect(combinePlaceholders(initial)).to.eql([{
+      words: [
+        {text: 'is ', input: true},
+        {placeholderTexts: ['pronoun'], placeholder: true}
+      ],
+      qualifiers: [],
+      arguments: [{start: 0, end: 2}],
+      annotations: [],
+      score: 1
+    }, {
+      words: [
+        {text: 'is ', input: true},
+        {placeholderTexts: ['pronoun'], placeholder: true},
+        {text: ' ', input: false},
+        {placeholderTexts: ['pronoun'], placeholder: true}
+      ],
+      qualifiers: [],
+      arguments: [{start: 0, end: 4}],
       annotations: [],
       score: 1
     }])
@@ -59,7 +168,7 @@ describe('combinePlaceholders', () => {
     expect(combinePlaceholders(initial)).to.eql([{
       words: [{placeholderTexts: ['he', 'she'], placeholder: true}],
       qualifiers: [],
-      arguments: [],
+      arguments: [{start: 0, end: 1}],
       annotations: [],
       score: 1
     }])
@@ -82,7 +191,7 @@ describe('combinePlaceholders', () => {
     expect(combinePlaceholders(initial)).to.eql([{
       words: [{text: 'he', input: false}],
       qualifiers: [],
-      arguments: [],
+      arguments: [{start: 0, end: 1}],
       annotations: [],
       score: 1
     }])
@@ -105,13 +214,13 @@ describe('combinePlaceholders', () => {
     expect(combinePlaceholders(initial)).to.eql([{
       words: [{text: 'he', input: false}],
       qualifiers: [{value: 'that guy', start: 0, end: 1}],
-      arguments: [],
+      arguments: [{start: 0, end: 1}],
       annotations: [],
       score: 1
     }, {
       words: [{text: 'he', input: false}],
       qualifiers: [{value: 'that other guy', start: 0, end: 1}],
-      arguments: [],
+      arguments: [{start: 0, end: 1}],
       annotations: [],
       score: 1
     }])
@@ -158,7 +267,7 @@ describe('combinePlaceholders', () => {
     expect(combinePlaceholders(initial)).to.eql([{
       words: [{text: 'he', input: false}],
       qualifiers: [],
-      arguments: [],
+      arguments: [{start: 0, end: 1}],
       annotations: [],
       score: 1
     }])

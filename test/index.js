@@ -329,6 +329,43 @@ describe('combinePlaceholders', () => {
     }])
   })
 
+  it('uses the first distinct qualifier', () => {
+    const initial = [{
+      words: [{text: 'he', input: false}],
+      qualifiers: [
+        {value: 'man', start: 0, end: 1},
+        {value: 'that guy', start: 0, end: 1},
+        {value: 'so and so', start: 0, end: 1}
+      ],
+      arguments: [{value: 'pronoun', start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }, {
+      words: [{text: 'he', input: false}],
+      qualifiers: [
+        {value: 'man', start: 0, end: 1},
+        {value: 'that other guy', start: 0, end: 1},
+        {value: 'your friend', start: 0, end: 1}
+      ],
+      arguments: [{value: 'pronoun', start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }]
+    expect(combinePlaceholders(initial)).to.eql([{
+      words: [{text: 'he', input: false}],
+      qualifiers: [{value: 'that guy', start: 0, end: 1}],
+      arguments: [{value: 'pronoun', start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }, {
+      words: [{text: 'he', input: false}],
+      qualifiers: [{value: 'that other guy', start: 0, end: 1}],
+      arguments: [{value: 'pronoun', start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }])
+  })
+
   it('does not combine text with different arguments', () => {
     const initial = [{
       words: [{text: 'he', input: false}],

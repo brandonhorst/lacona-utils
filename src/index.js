@@ -59,8 +59,14 @@ function removeUnnecessaryQualifiers (outputGroup) {
     .thru(qualifierGroup => _.intersectionWith(...qualifierGroup, compareQualifiers))
     .value()
 
+  // Remove the common qualifiers, and take the first unique qualifier for each
+  // end position, so as not to overload with information
   return _.map(outputGroup, output => {
-    const qualifiers = _.differenceWith(output.qualifiers, commonQualifiers, compareQualifiers)
+    const qualifiers = _.chain(output.qualifiers)
+      .differenceWith(commonQualifiers, compareQualifiers)
+      .uniqBy('end')
+      .value()
+
     return _.assign({}, output, {qualifiers})
   })
 }

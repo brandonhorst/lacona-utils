@@ -87,7 +87,7 @@ function mapPlaceholderGroups (qualifierGroup) {
   const placeholders = _.chain(qualifierGroup)
     .map(output => {
       return _.chain(output.words)
-        .map(word => word.placeholder ? word.text : undefined)
+        .map(word => word.placeholder ? word.label : undefined)
         .value()
     })
     .thru(descriptorLists => _.zip(...descriptorLists))
@@ -102,7 +102,7 @@ function mapPlaceholderGroups (qualifierGroup) {
       // no way to delete w/o cloning
       const newWord = _.clone(word)
       newWord.placeholderTexts = placeholders[index]
-      delete newWord.text
+      delete newWord.label
       return newWord
     } else {
       return word
@@ -113,6 +113,19 @@ function mapPlaceholderGroups (qualifierGroup) {
 }
 
 function doTopLevelArguments (output) {
+  // If any words don't have a placeholder label, use its argument instead
+  const newWords = _.map(output.words, (word, index) => {
+    if (word.placeholder && !word.label) {
+      const firstArgument = _.find(output.arguments, argument => {
+        return argument.start === index && argument.end === index + 1
+      })
+      if (firstArgument) {
+        return _.assign({}, word, {label: firstArgument.value})
+      }
+    }
+    return word
+  })
+
   let lastWord = 0
   const topLevelArguments = _.filter(output.arguments, ({start, end}) => {
     if (end > lastWord) {
@@ -128,7 +141,7 @@ function doTopLevelArguments (output) {
   const nullTopLevels = nullArguments(topLevelArguments, output.words.length)
 
 
-  return _.assign({}, output, {arguments: nullTopLevels})
+  return _.assign({}, output, {arguments: nullTopLevels, words: newWords})
 }
 
 export function combinePlaceholders (outputs, limit = 100) {

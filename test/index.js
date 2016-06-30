@@ -33,13 +33,13 @@ describe('combinePlaceholders', () => {
 
   it('combines placeholders', () => {
     const initial = [{
-      words: [{text: 'he', placeholder: true}],
+      words: [{label: 'he', placeholder: true}],
       qualifiers: [],
       arguments: [],
       annotations: [],
       score: 1
     }, {
-      words: [{text: 'she', placeholder: true}],
+      words: [{label: 'she', placeholder: true}],
       qualifiers: [],
       arguments: [],
       annotations: [],
@@ -56,13 +56,13 @@ describe('combinePlaceholders', () => {
 
   it('combines placeholders that have an argument', () => {
     const initial = [{
-      words: [{text: 'he', placeholder: true}],
+      words: [{label: 'he', placeholder: true}],
       qualifiers: [],
       arguments: [{value: 'pronoun', start: 0, end: 1}],
       annotations: [],
       score: 1
     }, {
-      words: [{text: 'she', placeholder: true}],
+      words: [{label: 'she', placeholder: true}],
       qualifiers: [],
       arguments: [{value: 'pronoun', start: 0, end: 1}],
       annotations: [],
@@ -80,9 +80,9 @@ describe('combinePlaceholders', () => {
   it('keeps sentences with multiple placeholders', () => {
     const initial = [{
       words: [
-        {text: 'he', placeholder: true},
+        {label: 'he', placeholder: true},
         {text: ' is ', input: false},
-        {text: 'she', placeholder: true}
+        {label: 'she', placeholder: true}
       ],
       qualifiers: [],
       arguments: [{value: 'pronoun', start: 0, end: 1}],
@@ -102,64 +102,15 @@ describe('combinePlaceholders', () => {
     }])
   })
 
-  it('test', () => {
-    const initial = [{
-      words: [
-        {text: 'is ', input: true},
-        {text: 'pronoun', placeholder: true}
-      ],
-      qualifiers: [],
-      arguments: [{value: 'pronoun', start: 1, end: 2}],
-      annotations: [],
-      score: 1
-    }, {
-      words: [
-        {text: 'is ', input: true},
-        {text: 'pronoun', placeholder: true},
-        {text: ' ', input: false},
-        {text: 'pronoun', placeholder: true}
-      ],
-      qualifiers: [],
-      arguments: [
-        {value: 'pronoun', start: 1, end: 2},
-        {value: 'pronoun', start: 3, end: 4}
-      ],
-      annotations: [],
-      score: 1
-    }]
-
-    expect(combinePlaceholders(initial)).to.eql([{
-      words: [
-        {text: 'is ', input: true},
-        {placeholderTexts: ['pronoun'], placeholder: true}
-      ],
-      qualifiers: [],
-      arguments: [{start: 0, end: 2}],
-      annotations: [],
-      score: 1
-    }, {
-      words: [
-        {text: 'is ', input: true},
-        {placeholderTexts: ['pronoun'], placeholder: true},
-        {text: ' ', input: false},
-        {placeholderTexts: ['pronoun'], placeholder: true}
-      ],
-      qualifiers: [],
-      arguments: [{start: 0, end: 4}],
-      annotations: [],
-      score: 1
-    }])
-  })
-
   it('combines placeholders in arguments', () => {
     const initial = [{
-      words: [{text: 'he', placeholder: true}],
+      words: [{label: 'he', placeholder: true}],
       qualifiers: [],
       arguments: [{value: 'he', start: 0, end: 1}],
       annotations: [],
       score: 1
     }, {
-      words: [{text: 'she', placeholder: true}],
+      words: [{label: 'she', placeholder: true}],
       qualifiers: [],
       arguments: [{value: 'she', start: 0, end: 1}],
       annotations: [],
@@ -190,6 +141,23 @@ describe('combinePlaceholders', () => {
     }]
     expect(combinePlaceholders(initial)).to.eql([{
       words: [{text: 'he', input: false}],
+      qualifiers: [],
+      arguments: [{start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }])
+  })
+
+  it('uses the argument if a placeholder label is not provided', () => {
+    const initial = [{
+      words: [{placeholder: true}],
+      qualifiers: [],
+      arguments: [{value: 'pronoun', start: 0, end: 1}],
+      annotations: [],
+      score: 1
+    }]
+    expect(combinePlaceholders(initial)).to.eql([{
+      words: [{placeholderTexts: ['pronoun'], placeholder: true}],
       qualifiers: [],
       arguments: [{start: 0, end: 1}],
       annotations: [],

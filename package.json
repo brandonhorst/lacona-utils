@@ -1,6 +1,6 @@
 {
   "name": "lacona-utils",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "description": "Utility functions for manipulating Lacona results",
   "main": "lib/index.js",
   "scripts": {

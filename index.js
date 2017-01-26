@@ -1,4 +1,4 @@
-import _ from 'lodash'
+const _ = require('lodash')
 
 function nullArguments (args, wordsLength) {
   let lastWord = 0
@@ -150,7 +150,7 @@ function doTopLevelArguments (output) {
   return _.assign({}, output, {arguments: nullTopLevels, words: newWords})
 }
 
-export function combinePlaceholders (outputs, limit = 100) {
+exports.combinePlaceholders = function (outputs, limit = 100) {
   return _.chain(outputs)
     .map(doTopLevelArguments)
     .groupBy(groupArguments)

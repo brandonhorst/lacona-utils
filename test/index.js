@@ -1,5 +1,5 @@
-import {expect} from 'chai'
-import {combinePlaceholders} from '../src/index'
+const {expect} = require('chai')
+const {combinePlaceholders} = require('..')
 
 describe('combinePlaceholders', () => {
   it('does not combine different inputs', () => {
